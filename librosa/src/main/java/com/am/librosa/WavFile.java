@@ -6,6 +6,7 @@ import android.content.res.AssetFileDescriptor;
 import com.jlibrosa.audio.wavFile.WavFileException;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -111,8 +112,12 @@ class WavFile {
         WavFile wavFile = new WavFile();
 
         // Create a new file input stream for reading file data
-        AssetFileDescriptor assetFileDescriptor = context.getResources().openRawResourceFd(raw);
-        wavFile.iStream = assetFileDescriptor.createInputStream();
+        if (context != null)
+            wavFile.iStream = context.getResources().openRawResourceFd(raw).createInputStream();
+        else
+            wavFile.iStream = new FileInputStream(file);
+
+//        AssetFileDescriptor assetFileDescriptor = assetFileDescriptor1;
 
         // Read the first 12 bytes of the file
         int bytesRead = wavFile.iStream.read(wavFile.buffer, 0, 12);

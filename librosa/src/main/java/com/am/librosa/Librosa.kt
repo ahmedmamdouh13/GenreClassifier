@@ -1,25 +1,24 @@
 package com.am.librosa
 
+import android.app.Application
 import android.content.Context
 import androidx.annotation.RawRes
+import java.io.File
 import kotlin.math.ceil
 
-object Librosa {
-  private const val n_mfcc = 13
-  private const val hopLength = 512
-  private const val sampleRate = 22050
-  private const val duration = 3
-  private const val samplesPerTrack = sampleRate * duration
-  private const val numSegments = 5
-  private const val numSamplesPerSegment: Int = samplesPerTrack / numSegments
-  private val expectedMfccVectorsPerSegment =
+class Librosa() {
+    private val n_mfcc = 13
+    private val hopLength = 512
+    private val sampleRate = 22050
+    private val duration = 3
+    private val samplesPerTrack = sampleRate * duration
+    private val numSegments = 5
+    private val numSamplesPerSegment: Int = samplesPerTrack / numSegments
+    private val expectedMfccVectorsPerSegment =
         ceil((numSamplesPerSegment.toDouble() / hopLength)).toInt()
 
-   fun getStftFromRaw(context: Context, @RawRes audioFileRes: Int): Array<FloatArray> {
-
+    fun getStft(context: Context, @RawRes audioFileRes: Int): Array<FloatArray> {
         val jLibrosa = JLibrosa()
-
-        val arrayOfFloatArray = arrayListOf<FloatArray>()
 
         val audioFloatArray = jLibrosa.loadAndRead(
             "",
@@ -28,6 +27,23 @@ object Librosa {
             context,
             audioFileRes
         )
+
+        return getStft(audioFloatArray, jLibrosa)
+    }
+
+
+    fun getStft(file: File): Array<FloatArray> {
+        val jLibrosa = JLibrosa()
+
+        val audioFloatArray = jLibrosa.loadAndRead(file, -1, -1)
+
+        return getStft(audioFloatArray, JLibrosa())
+    }
+
+
+    private fun getStft(audioFloatArray: FloatArray, jLibrosa: JLibrosa): Array<FloatArray> {
+
+        val arrayOfFloatArray = arrayListOf<FloatArray>()
 
         for (s in 0 until numSegments) {
             val start = numSamplesPerSegment * s

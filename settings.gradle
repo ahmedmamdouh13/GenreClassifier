@@ -18,3 +18,4 @@ rootProject.name = "GenreClassifier"
 include ':app'
 include ':genreclassifier'
 include ':librosa'
+include ':core'

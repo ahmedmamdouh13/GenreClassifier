@@ -1,6 +1,7 @@
 package com.am.genreclassifier
 
 import android.content.Context
+import com.am.core.state.ViewState
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil
@@ -46,23 +47,25 @@ class GenreClassifier(ctx: Context) {
         tflite.runForMultipleInputsOutputs(stft, output)
     }
 
-    fun scan(stft: Array<FloatArray>): String {
+    fun scan(stft: Array<FloatArray>, processId: String): ViewState {
         val output = arrayOf(FloatArray(predictionLabels.size))
         var result = ""
+       return try {
+            run(stft, output)
+           output.forEach {
 
-        run(stft, output)
+               val maxOfValues = it.maxOf {
+                   it
+               }
+               val indexOfFirst = it.indexOfFirst {
+                   it == maxOfValues
+               }
 
-        output.forEach {
-
-            val maxOfValues = it.maxOf {
-                it
-            }
-            val indexOfFirst = it.indexOfFirst {
-                it == maxOfValues
-            }
-
-            result = predictionLabels[indexOfFirst]
+               result = predictionLabels[indexOfFirst]
+           }
+           ViewState.Success(Genre(result, processId))
+        }catch (e: Exception){
+           ViewState.Error(e)
         }
-        return result
     }
 }
