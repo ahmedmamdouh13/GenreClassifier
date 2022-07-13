@@ -9,4 +9,7 @@ java {
 }
 dependencies {
     implementation project(":core")
+
+    //koin
+    implementation "io.insert-koin:koin-core:$rootProject.koin_version"
 }

@@ -1,4 +1,4 @@
-package com.am.genreclassifier.domain
+package com.am.domain.usecase
 
 import com.am.core.state.ViewState
 import com.am.domain.usecase.ClassifyTrackUseCase
