@@ -42,4 +42,8 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite:2.9.0'
     implementation 'org.tensorflow:tensorflow-lite-gpu:2.8.0'
     implementation 'org.tensorflow:tensorflow-lite-support:+'
+
+    //koin
+    implementation "io.insert-koin:koin-android:$rootProject.koin_version"
+
 }

@@ -1,12 +1,8 @@
-package com.am.librosa
+package com.am.librosa.data.util
 
-import android.app.Application
-import android.content.Context
-import androidx.annotation.RawRes
-import java.io.File
 import kotlin.math.ceil
 
-class Librosa() {
+class LibrosaHelper() {
     private val n_mfcc = 13
     private val hopLength = 512
     private val sampleRate = 22050
@@ -17,31 +13,9 @@ class Librosa() {
     private val expectedMfccVectorsPerSegment =
         ceil((numSamplesPerSegment.toDouble() / hopLength)).toInt()
 
-    fun getStft(context: Context, @RawRes audioFileRes: Int): Array<FloatArray> {
-        val jLibrosa = JLibrosa()
-
-        val audioFloatArray = jLibrosa.loadAndRead(
-            "",
-            -1,
-            -1,
-            context,
-            audioFileRes
-        )
-
-        return getStft(audioFloatArray, jLibrosa)
-    }
 
 
-    fun getStft(file: File): Array<FloatArray> {
-        val jLibrosa = JLibrosa()
-
-        val audioFloatArray = jLibrosa.loadAndRead(file, -1, -1)
-
-        return getStft(audioFloatArray, JLibrosa())
-    }
-
-
-    private fun getStft(audioFloatArray: FloatArray, jLibrosa: JLibrosa): Array<FloatArray> {
+    fun getStft(audioFloatArray: FloatArray, jLibrosa: JLibrosa): Array<FloatArray> {
 
         val arrayOfFloatArray = arrayListOf<FloatArray>()
 
@@ -86,27 +60,6 @@ class Librosa() {
         return transpose
     }
 
-
-//
-//    private fun getTestArray(): Array<FloatArray> {
-//        val inputStream = resources.assets.open("input_genre_test2.txt")
-//        val reader = inputStream.reader()
-//        val readText = reader.readText()
-//        var floatList = readText.lines().flatMap { list ->
-//            list.split(" ").map {
-//                if (it.isNotBlank() || it.isNotEmpty())
-//                    it.toFloat()
-//                else -9000f
-//            }
-//        }
-//        floatList = floatList.filterIndexed { index, fl ->
-//            fl != -9000f
-//        }
-//
-//        println("Am i better?: ${floatList.size}")
-//
-//        return arrayOf(floatList.toFloatArray())
-//    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.am.librosa;
+package com.am.librosa.data.util;
 
 import android.content.Context;
 
@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.math3.complex.Complex;
 
+import com.am.librosa.data.util.WavFile;
 import com.jlibrosa.audio.exception.FileFormatNotSupportedException;
 import com.jlibrosa.audio.process.AudioFeatureExtraction;
 import com.jlibrosa.audio.wavFile.WavFileException;
@@ -24,7 +25,7 @@ import com.jlibrosa.audio.wavFile.WavFileException;
  * @author abhi-rawat1
  *
  */
-class JLibrosa {
+public class JLibrosa {
 	private int BUFFER_SIZE = 4096;
 	private int noOfFrames = -1;
 	private int sampleRate = -1;

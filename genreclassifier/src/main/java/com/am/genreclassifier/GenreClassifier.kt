@@ -1,12 +1,11 @@
 package com.am.genreclassifier
 
 import android.content.Context
-import com.am.core.state.ViewState
+import com.am.genreclassifier.model.Genre
+import com.am.genreclassifier.model.Track
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 
 class GenreClassifier(ctx: Context) {
     companion object {
@@ -47,25 +46,22 @@ class GenreClassifier(ctx: Context) {
         tflite.runForMultipleInputsOutputs(stft, output)
     }
 
-    fun scan(stft: Array<FloatArray>, processId: String): ViewState {
+    fun scan(track: Track): Genre {
         val output = arrayOf(FloatArray(predictionLabels.size))
         var result = ""
-       return try {
-            run(stft, output)
-           output.forEach {
+        run(track.audioFloatArray, output)
+        output.forEach {
 
-               val maxOfValues = it.maxOf {
-                   it
-               }
-               val indexOfFirst = it.indexOfFirst {
-                   it == maxOfValues
-               }
+            val maxOfValues = it.maxOf {
+                it
+            }
+            val indexOfFirst = it.indexOfFirst {
+                it == maxOfValues
+            }
 
-               result = predictionLabels[indexOfFirst]
-           }
-           ViewState.Success(Genre(result, processId))
-        }catch (e: Exception){
-           ViewState.Error(e)
+            result = predictionLabels[indexOfFirst]
         }
+
+        return Genre(result, track.trackId)
     }
 }

@@ -1,12 +1,10 @@
-package com.am.librosa;
+package com.am.librosa.data.util;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 
 import com.jlibrosa.audio.wavFile.WavFileException;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

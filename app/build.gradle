@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 def lifecycle_version = "2.5.0"
-def koin_version = "3.2.0"
+
 android {
     compileSdk 32
 
@@ -68,7 +68,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     //koin
-    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-android:$rootProject.koin_version"
 
 
     //Compose
