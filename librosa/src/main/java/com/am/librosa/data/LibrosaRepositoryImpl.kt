@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.annotation.RawRes
 import com.am.librosa.data.util.LibrosaHelper
 import com.am.librosa.data.util.JLibrosa
-import com.am.librosa.domain.LibrosaRepository
+import com.am.domain.repo.LibrosaRepository
 import java.io.File
 
 class LibrosaRepositoryImpl(private val librosa: LibrosaHelper,

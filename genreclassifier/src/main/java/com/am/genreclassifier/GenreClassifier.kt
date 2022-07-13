@@ -2,7 +2,7 @@ package com.am.genreclassifier
 
 import android.content.Context
 import com.am.genreclassifier.model.Genre
-import com.am.genreclassifier.model.Track
+import com.am.domain.model.Track
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil

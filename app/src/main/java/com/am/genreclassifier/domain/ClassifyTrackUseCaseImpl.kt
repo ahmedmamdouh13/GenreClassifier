@@ -1,9 +1,10 @@
 package com.am.genreclassifier.domain
 
 import com.am.core.state.ViewState
-import com.am.genreclassifier.model.Track
-import com.am.genreclassifier.state.MainViewState
-import com.am.librosa.domain.LibrosaRepository
+import com.am.domain.usecase.ClassifyTrackUseCase
+import com.am.domain.repo.GenreClassifierRepository
+import com.am.domain.model.Track
+import com.am.domain.repo.LibrosaRepository
 import java.io.File
 
 class ClassifyTrackUseCaseImpl(
@@ -11,13 +12,6 @@ class ClassifyTrackUseCaseImpl(
     private val classifierRepository: GenreClassifierRepository
 ) : ClassifyTrackUseCase {
 
-    override suspend fun scan(track: Track): ViewState {
-        return try {
-            classifierRepository.scan(track)
-        } catch (e: Exception) {
-            ViewState.Error(e)
-        }
-    }
 
     override suspend fun scan(rawRes: Int, itemId: String): ViewState {
         return try {

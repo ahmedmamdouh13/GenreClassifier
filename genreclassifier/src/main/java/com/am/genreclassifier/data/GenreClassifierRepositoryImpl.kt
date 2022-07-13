@@ -2,8 +2,8 @@ package com.am.genreclassifier.data
 
 import com.am.core.state.ViewState
 import com.am.genreclassifier.GenreClassifier
-import com.am.genreclassifier.model.Track
-import com.am.genreclassifier.domain.GenreClassifierRepository
+import com.am.domain.model.Track
+import com.am.domain.repo.GenreClassifierRepository
 
 class GenreClassifierRepositoryImpl(val genreClassifier: GenreClassifier) :
     GenreClassifierRepository {

@@ -1,7 +1,7 @@
-package com.am.genreclassifier.domain
+package com.am.domain.repo
 
 import com.am.core.state.ViewState
-import com.am.genreclassifier.model.Track
+import com.am.domain.model.Track
 
 interface GenreClassifierRepository {
     suspend fun scan(track: Track): ViewState

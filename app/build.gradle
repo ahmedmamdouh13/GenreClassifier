@@ -55,6 +55,7 @@ dependencies {
     implementation project(":genreclassifier")
     implementation project(":librosa")
     implementation project(":core")
+    implementation project(":domain")
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2"
 

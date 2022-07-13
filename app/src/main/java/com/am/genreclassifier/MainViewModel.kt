@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.am.genreclassifier.intent.MainViewIntent
 import com.am.genreclassifier.state.MainViewState
 import com.am.core.state.ViewState
-import com.am.genreclassifier.domain.ClassifyTrackUseCase
+import com.am.domain.usecase.ClassifyTrackUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -20,6 +20,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 //TODO
 // TDD
 // Use https://github.com/adrielcafe/AndroidAudioConverter to convert any audio to wav.
+// write unit tests.
+// Implement Design
 
 
 class MainActivity : ComponentActivity() {
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     "reggae_00008"
                 )
             )
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.blues, "blues"))
+            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(1, "blues"))
             mainViewModel.channel.send(
                 MainViewIntent.ScanTrackRawRes(
                     R.raw.rock_example,
@@ -64,7 +66,7 @@ class MainActivity : ComponentActivity() {
                 items(state.state.toList()) {
                     when (val viewState = it.second) {
                         ViewState.Idle -> Text(text = "Idle" + " ${it.first}")
-                        is ViewState.Error -> Text(text = viewState.e.message!! + " ${it.first}")
+                        is ViewState.Error -> Text(text = "Error " + viewState.e.message!! + " ${it.first}")
                         is ViewState.Loading -> Text(text = viewState.msg + " ${it.first}")
                         is ViewState.Success<*> -> Text(text = (viewState.data as Genre).genre + " ${it.first}")
                     }
