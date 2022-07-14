@@ -1,6 +1,7 @@
 package com.am.genreclassifier.application
 
 import android.app.Application
+import com.am.domain.di.DomainModule
 import com.am.genreclassifier.di.AppModule
 import com.am.genreclassifier.di.GenreClassifierModule
 import com.am.librosa.di.LibrosaModule
@@ -15,7 +16,8 @@ class GenreClassifierApplication: Application() {
             androidContext(this@GenreClassifierApplication)
             modules(AppModule,
                 GenreClassifierModule,
-                LibrosaModule
+                LibrosaModule,
+                DomainModule
                 )
         }
     }

@@ -3,6 +3,7 @@ package com.am.genreclassifier
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.am.core.model.ViewEffect
 import com.am.genreclassifier.intent.MainViewIntent
 import com.am.genreclassifier.state.MainViewState
 import com.am.core.state.ViewState
@@ -19,14 +20,12 @@ class MainViewModel(
     private val useCase: ClassifyTrackUseCase
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<MainViewState> = MutableStateFlow(MainViewState.Idle)
-
-    private val stateMap = mutableStateMapOf<String, ViewState>()
+    private val _state: MutableStateFlow<MainViewState> = MutableStateFlow(MainViewState())
 
     val state: StateFlow<MainViewState>
         get() = _state
 
-    val channel = Channel<MainViewIntent>(Int.MAX_VALUE)
+    val channel = Channel<MainViewIntent>(Channel.UNLIMITED)
 
     init {
         setUpChannel()
@@ -41,8 +40,9 @@ class MainViewModel(
                         itemId = intent.processId
                     )
                     is MainViewIntent.ScanTrackRawRes -> {
-                        stateMap[intent.processId] = ViewState.Loading("Loading genre!")
-                        render { MainViewState.Success(stateMap) }
+                        render {
+                            it.copy(scanLoading = ViewEffect(true, "Loading.."))
+                        }
                         scan(intent.rawRes, itemId = intent.processId)
                     }
                 }
@@ -55,22 +55,44 @@ class MainViewModel(
     }
 
     private suspend fun scan(rawRes: Int, itemId: String) {
-        try {
-            val result = useCase.scan(rawRes, itemId)
-            stateMap[itemId] = result
-            render { MainViewState.Success(stateMap) }
-        } catch (e: Exception) {
-            render { MainViewState.Error(e) }
+        render {
+            it.genreResultList[itemId] = ViewState.Loading("*****")
+            it
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try {
+                val result = useCase.scan(rawRes, itemId)
+
+                render {
+                    it.genreResultList[itemId] = result
+                    it.copy(scanLoading = ViewEffect(false))
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                render {
+                    it.copy(scanError = ViewEffect(true, e.localizedMessage!!))
+                }
+            }
         }
     }
 
     private suspend fun scan(file: File, itemId: String) {
         try {
             val result = useCase.scan(file, itemId)
-            stateMap[itemId] = result
-            render { MainViewState.Success(stateMap) }
+
+            render {
+                it.genreResultList[itemId] = ViewState.Loading("*****")
+                it
+            }
+
+            render {
+                it.genreResultList[itemId] = result
+                MainViewState(it.genreResultList)
+            }
         } catch (e: Exception) {
-            render { MainViewState.Error(e) }
+            render { it.copy(scanError = ViewEffect(true, e.localizedMessage!!)) }
         }
     }
 

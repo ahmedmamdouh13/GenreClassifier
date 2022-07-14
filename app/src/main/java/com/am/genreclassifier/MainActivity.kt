@@ -3,12 +3,16 @@ package com.am.genreclassifier
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.am.core.state.ViewState
@@ -44,11 +48,39 @@ class MainActivity : ComponentActivity() {
                     "reggae_00008"
                 )
             )
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(1, "blues"))
+            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.blues, "blues7"))
             mainViewModel.channel.send(
                 MainViewIntent.ScanTrackRawRes(
                     R.raw.rock_example,
-                    "rock_example"
+                    "rock6"
+                )
+            )
+            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.pop_00094, "pop_000945"))
+            mainViewModel.channel.send(
+                MainViewIntent.ScanTrackRawRes(
+                    R.raw.reggae_00008,
+                    "reggae_00008"
+                )
+            )
+            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.blues, "blues6"))
+            mainViewModel.channel.send(
+                MainViewIntent.ScanTrackRawRes(
+                    R.raw.rock_example,
+                    "rock_example5"
+                )
+            )
+            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.pop_00094, "pop_000954"))
+            mainViewModel.channel.send(
+                MainViewIntent.ScanTrackRawRes(
+                    R.raw.reggae_00008,
+                    "reggae_00001"
+                )
+            )
+            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.blues, "blues6"))
+            mainViewModel.channel.send(
+                MainViewIntent.ScanTrackRawRes(
+                    R.raw.rock_example,
+                    "rock_example3"
                 )
             )
         }
@@ -57,19 +89,26 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainScreen(state: MainViewState = MainViewState.Idle) {
-        when (state) {
-            is MainViewState.Error -> Text(text = state.e.message!!)
-            MainViewState.Idle -> Text(text = "Idle")
-            is MainViewState.Loading -> Text(text = state.msg)
-            is MainViewState.Success -> LazyColumn {
-                items(state.state.toList()) {
-                    when (val viewState = it.second) {
-                        ViewState.Idle -> Text(text = "Idle" + " ${it.first}")
-                        is ViewState.Error -> Text(text = "Error " + viewState.e.message!! + " ${it.first}")
-                        is ViewState.Loading -> Text(text = viewState.msg + " ${it.first}")
-                        is ViewState.Success<*> -> Text(text = (viewState.data as Genre).genre + " ${it.first}")
-                    }
+    fun MainScreen(state: MainViewState = MainViewState()) {
+
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            if (state.scanLoading.isActive) {
+                Text(text = state.scanLoading.msg)
+            }
+            if (state.scanError.isActive) {
+                Text(text = state.scanError.msg)
+            }
+        }
+
+
+
+        LazyColumn {
+            items(state.genreResultList.toList()) {
+                when (val viewState = it.second) {
+                    ViewState.Idle -> Text(text = "Idle" + " ${it.first}")
+                    is ViewState.Error -> Text(text = "Error " + viewState.e.message!! + " ${it.first}")
+                    is ViewState.Loading -> Text(text = viewState.msg + " ${it.first}")
+                    is ViewState.Success<*> -> Text(text = (viewState.data as Genre).genre + " ${it.first}")
                 }
             }
         }

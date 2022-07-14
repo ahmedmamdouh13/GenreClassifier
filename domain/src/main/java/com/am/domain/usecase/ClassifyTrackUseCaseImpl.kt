@@ -18,6 +18,7 @@ class ClassifyTrackUseCaseImpl(
             val stft = librosaRepository.getStft(rawRes)
             classifierRepository.scan(Track(stft, itemId))
         } catch (e: Exception) {
+            e.printStackTrace()
             ViewState.Error(e)
         }
     }
@@ -27,6 +28,7 @@ class ClassifyTrackUseCaseImpl(
             val stft = librosaRepository.getStft(file)
             classifierRepository.scan(Track(stft, itemId))
         } catch (e: Exception) {
+            e.printStackTrace()
             ViewState.Error(e)
         }
     }

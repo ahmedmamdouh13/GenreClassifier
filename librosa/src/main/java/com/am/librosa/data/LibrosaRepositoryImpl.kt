@@ -8,10 +8,11 @@ import com.am.domain.repo.LibrosaRepository
 import java.io.File
 
 class LibrosaRepositoryImpl(private val librosa: LibrosaHelper,
-                            private val jLibrosa: JLibrosa,
+                            private  val jLibrosa: JLibrosa,
                             private val context: Context): LibrosaRepository {
 
-   override suspend fun getStft(@RawRes audioFileRes: Int): Array<FloatArray> {
+    @Synchronized
+   override fun getStft(@RawRes audioFileRes: Int): Array<FloatArray> {
         val audioFloatArray = jLibrosa.loadAndRead(
             "",
             -1,
@@ -23,7 +24,8 @@ class LibrosaRepositoryImpl(private val librosa: LibrosaHelper,
         return librosa.getStft(audioFloatArray, jLibrosa)
     }
 
-    override suspend fun getStft(file: File): Array<FloatArray> {
+    @Synchronized
+    override fun getStft(file: File): Array<FloatArray> {
         val audioFloatArray = jLibrosa.loadAndRead(file, -1, -1)
 
         return librosa.getStft(audioFloatArray,
