@@ -45,6 +45,10 @@ class MainViewModel(
                         }
                         scan(intent.rawRes, itemId = intent.processId)
                     }
+                    MainViewIntent.ChooseTrackFile -> {
+
+
+                    }
                 }
             }
         }
@@ -79,20 +83,26 @@ class MainViewModel(
     }
 
     private suspend fun scan(file: File, itemId: String) {
-        try {
-            val result = useCase.scan(file, itemId)
+        render {
+            it.genreResultList[itemId] = ViewState.Loading("*****")
+            it
+        }
+        viewModelScope.launch(Dispatchers.IO) {
 
-            render {
-                it.genreResultList[itemId] = ViewState.Loading("*****")
-                it
-            }
+            try {
+                val result = useCase.scan(file, itemId)
 
-            render {
-                it.genreResultList[itemId] = result
-                MainViewState(it.genreResultList)
+                render {
+                    it.genreResultList[itemId] = result
+                    it.copy(scanLoading = ViewEffect(false))
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                render {
+                    it.copy(scanError = ViewEffect(true, e.localizedMessage!!))
+                }
             }
-        } catch (e: Exception) {
-            render { it.copy(scanError = ViewEffect(true, e.localizedMessage!!)) }
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import com.am.core.state.ViewState
 import com.am.genreclassifier.intent.MainViewIntent
 import com.am.genreclassifier.model.Genre
 import com.am.genreclassifier.state.MainViewState
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 //TODO
@@ -31,65 +33,34 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModel<MainViewModel>()
+    private val chooseAudioFileHelper = ChooseAudioFileHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                MainScreen(mainViewModel.state.collectAsState().value)
+                MainScreen(mainViewModel.state.collectAsState().value) {
+
+                    chooseAudioFileHelper.chooseFromStorage { waveFile, fileName ->
+                        lifecycleScope.launch {
+                            mainViewModel.channel.send(MainViewIntent.ScanTrackFile(file = waveFile, fileName))
+                        }
+                    }
+                }
             }
         }
-
-        lifecycleScope.launchWhenCreated {
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.pop_00094, "pop_00094"))
-            mainViewModel.channel.send(
-                MainViewIntent.ScanTrackRawRes(
-                    R.raw.reggae_00008,
-                    "reggae_00008"
-                )
-            )
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.blues, "blues7"))
-            mainViewModel.channel.send(
-                MainViewIntent.ScanTrackRawRes(
-                    R.raw.rock_example,
-                    "rock6"
-                )
-            )
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.pop_00094, "pop_000945"))
-            mainViewModel.channel.send(
-                MainViewIntent.ScanTrackRawRes(
-                    R.raw.reggae_00008,
-                    "reggae_00008"
-                )
-            )
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.blues, "blues6"))
-            mainViewModel.channel.send(
-                MainViewIntent.ScanTrackRawRes(
-                    R.raw.rock_example,
-                    "rock_example5"
-                )
-            )
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.pop_00094, "pop_000954"))
-            mainViewModel.channel.send(
-                MainViewIntent.ScanTrackRawRes(
-                    R.raw.reggae_00008,
-                    "reggae_00001"
-                )
-            )
-            mainViewModel.channel.send(MainViewIntent.ScanTrackRawRes(R.raw.blues, "blues6"))
-            mainViewModel.channel.send(
-                MainViewIntent.ScanTrackRawRes(
-                    R.raw.rock_example,
-                    "rock_example3"
-                )
-            )
-        }
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), 111
+        )
 
 
     }
 
     @Composable
-    fun MainScreen(state: MainViewState = MainViewState()) {
+    fun MainScreen(state: MainViewState = MainViewState(), onAddTrackClicked: () -> Unit) {
 
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             if (state.scanLoading.isActive) {
@@ -113,13 +84,17 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        Button(onClick = onAddTrackClicked) {
+            Text(text = "Add Track")
+        }
+
     }
 
     @Preview(showSystemUi = true)
     @Composable
     fun PreviewMainScreen() {
         MaterialTheme {
-            MainScreen()
+//            MainScreen()
         }
     }
 
