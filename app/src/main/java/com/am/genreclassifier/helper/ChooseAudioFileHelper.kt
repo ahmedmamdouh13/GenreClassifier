@@ -1,29 +1,27 @@
-package com.am.genreclassifier
+package com.am.genreclassifier.helper
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.lifecycleScope
-import com.am.genreclassifier.intent.MainViewIntent
 import java.io.File
+import kotlin.math.acos
 
-class ChooseAudioFileHelper(var context: ComponentActivity) {
+class ChooseAudioFileHelper(val activity: ComponentActivity) {
     private lateinit var onChosen: (File, String) -> Unit
 
     fun chooseFromStorage(onFileChosen: (waveFile: File, fileName: String) -> Unit) {
         val intent = Intent()
-        intent.type = "audio/*"
+        intent.type = "audio/x-wav"
         intent.action = Intent.ACTION_GET_CONTENT
         resultLauncher.launch(intent)
 
         onChosen = onFileChosen
     }
 
-    val resultLauncher =
-        context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val resultLauncher =
+        activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val path = result?.data?.data?.path!!
