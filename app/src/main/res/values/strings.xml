@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GenreClassifier</string>
+    <string name="title_activity_main_example">MainActivityExample</string>
 </resources>

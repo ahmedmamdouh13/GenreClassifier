@@ -13,6 +13,8 @@ import com.am.genreclassifier.helper.ChooseAudioFileHelper
 import com.am.genreclassifier.helper.PermissionManager
 import com.am.genreclassifier.intent.MainViewIntent
 import com.am.genreclassifier.ui.mainscreen.MainScreen
+import com.am.genreclassifier.ui.theme.GenreClassifierTheme
+import com.am.genreclassifier.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 //TODO
@@ -23,7 +25,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 // Write better idempotent logic
 
 
-
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModel<MainViewModel>()
@@ -32,16 +33,23 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            MaterialTheme {
-                MainScreen(mainViewModel.state.collectAsState().value) {
-                   if (permissionManager.requestPermission() == PackageManager.PERMISSION_GRANTED){
-                       lifecycleScope.launchWhenCreated {
-                           mainViewModel.channel.send(MainViewIntent.ChooseTrackFile(chooseAudioFileHelper))
-                       }
-                   }
-                }
+            GenreClassifierTheme {
+                MainScreen(mainViewModel.state.collectAsState().value, {
+                    if (permissionManager.requestPermission() == PackageManager.PERMISSION_GRANTED) {
+                        lifecycleScope.launchWhenCreated {
+                            mainViewModel.channel.send(
+                                MainViewIntent.ChooseTrackFile(
+                                    chooseAudioFileHelper
+                                )
+                            )
+                        }
+                    }
+                }, {
+                    lifecycleScope.launchWhenCreated {
+                        mainViewModel.channel.send(MainViewIntent.Scan)
+                    }
+                })
 
             }
         }

@@ -15,16 +15,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.am.genreclassifier.model.ScanButton
-import com.am.genreclassifier.ui.color.GradientColorEnd
-import com.am.genreclassifier.ui.color.ScanButtonColor
+import com.am.genreclassifier.state.ScanButton
+import com.am.genreclassifier.ui.theme.ScanButtonColor
 
 
 private val buttonColor = object : ButtonColors {
     @Composable
     override fun backgroundColor(enabled: Boolean): State<Color> {
         return if (enabled) derivedStateOf { ScanButtonColor }
-        else derivedStateOf { GradientColorEnd }
+        else derivedStateOf { ScanButtonColor }
     }
 
     @Composable

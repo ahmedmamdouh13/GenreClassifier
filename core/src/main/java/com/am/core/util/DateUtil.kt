@@ -1,11 +1,11 @@
-package com.am.genreclassifier.ui.util
+package com.am.core.util
 
 import java.util.*
 
 typealias DisplayableDate = String
 
 
-fun getCurrentDisplayableDate(): DisplayableDate{
+fun getCurrentDisplayableDate(): DisplayableDate {
     val dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
     val month = Calendar.getInstance().get(Calendar.MONTH) + 1
     val year = Calendar.getInstance().get(Calendar.YEAR) - 2000

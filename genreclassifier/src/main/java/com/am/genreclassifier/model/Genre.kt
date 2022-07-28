@@ -1,3 +1,11 @@
 package com.am.genreclassifier.model
 
-data class Genre(val genre: String, val processId: String)
+import com.am.core.util.DisplayableDate
+import java.util.*
+
+data class Genre(
+    val processId: UUID,
+    val genre: String,
+    val trackName: String,
+    val displayableDate: DisplayableDate
+)

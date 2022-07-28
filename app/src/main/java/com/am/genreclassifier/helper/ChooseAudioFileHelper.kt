@@ -6,10 +6,8 @@ import android.os.Environment
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import java.io.File
-import kotlin.math.acos
 
-class ChooseAudioFileHelper(val activity: ComponentActivity) {
-    private lateinit var onChosen: (File, String) -> Unit
+class ChooseAudioFileHelper(activity: ComponentActivity) {
 
     fun chooseFromStorage(onFileChosen: (waveFile: File, fileName: String) -> Unit) {
         val intent = Intent()
@@ -33,4 +31,8 @@ class ChooseAudioFileHelper(val activity: ComponentActivity) {
                 onChosen(file, name)
             }
         }
+
+    companion object {
+        private lateinit var onChosen: (File, String) -> Unit
+    }
 }

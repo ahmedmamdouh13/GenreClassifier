@@ -2,7 +2,7 @@ package com.am.genreclassifier
 
 import android.content.Context
 import com.am.genreclassifier.model.Genre
-import com.am.domain.model.Track
+import com.am.genreclassifier.model.Track
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil
@@ -30,7 +30,7 @@ class GenreClassifier(ctx: Context) {
         NnApiDelegate()
     }
 
-    private val tflite by lazy {
+    private val tflite by lazy(mode = LazyThreadSafetyMode.PUBLICATION) {
         Interpreter(
             FileUtil.loadMappedFile(ctx, MODEL_PATH),
             Interpreter.Options().addDelegate(nnApiDelegate)
@@ -62,6 +62,6 @@ class GenreClassifier(ctx: Context) {
             result = predictionLabels[indexOfFirst]
         }
 
-        return Genre(result, track.trackId)
+        return Genre(track.trackId, result, track.trackName, track.displayableDate)
     }
 }
