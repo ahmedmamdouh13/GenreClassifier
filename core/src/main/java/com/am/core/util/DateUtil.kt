@@ -15,3 +15,7 @@ fun getCurrentDisplayableDate(): DisplayableDate {
 
     return "$dayOfMonth $monthShort'$year"
 }
+
+fun getCurrentTimestamp(): Long {
+    return Calendar.getInstance().timeInMillis
+}

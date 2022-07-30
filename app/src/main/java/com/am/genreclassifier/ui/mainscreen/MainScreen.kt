@@ -6,6 +6,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -17,7 +18,7 @@ import com.am.genreclassifier.ui.util.Position
 
 
 @Composable
-fun MainScreen(state: GenreUiState = GenreUiState(), onAddTrackClicked: () -> Unit, onScanClicked: () -> Unit) {
+fun MainScreen(state: GenreUiState = remember {GenreUiState()}, onAddTrackClicked: () -> Unit, onScanClicked: () -> Unit) {
     Scaffold(topBar = {
         ToolbarItem()
     }

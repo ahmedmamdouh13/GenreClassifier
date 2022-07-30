@@ -11,6 +11,7 @@ enum class GenreType(s: String) {
    REGGAE("reggae"),
    POP("pop"),
    JAZZ("jazz"),
-   LOADING("in_progress"),
-   IDLE("Idle"),
+   LOADING("In-Progress"),
+   IDLE("Idle");
+   val displayableName = s
 }

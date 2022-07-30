@@ -14,6 +14,7 @@ class DatabaseHelper(context: Context) {
         config = RealmConfiguration.Builder()
             .allowQueriesOnUiThread(false)
             .allowWritesOnUiThread(false)
+            .deleteRealmIfMigrationNeeded()
             .build()
     }
 
@@ -21,7 +22,7 @@ class DatabaseHelper(context: Context) {
     suspend fun nextGenreItems(from: Int, next: Int = 10): List<GenreRealmObject> {
         return Realm.getInstance(config)
             .where(GenreRealmObject::class.java)
-            .sort("date", Sort.DESCENDING)
+            .sort("timeStamp", Sort.ASCENDING)
             .findAll()
             .toList()
     }

@@ -16,12 +16,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.am.core.state.ViewState
 import com.am.genreclassifier.R
 import com.am.genreclassifier.mapper.mapToColor
 import com.am.genreclassifier.ui.util.Padding
 import com.am.genreclassifier.ui.util.Position
 import com.am.genreclassifier.state.GenreItemUiState
 import com.am.genreclassifier.model.GenreType
+import com.am.genreclassifier.ui.theme.Typography
 import java.util.*
 
 @Composable
@@ -30,6 +32,10 @@ fun TrackItem(pair: Pair<UUID, GenreItemUiState>) {
     val trackName = pair.second.trackName
     val genreBackgroundColor = pair.second.genreColor
 
+    val genreFont = when(pair.second.state){
+        ViewState.Success -> Typography.subtitle1
+        else -> Typography.subtitle2
+    }
         Row(
             modifier = Modifier
                 .height(60.dp)
@@ -41,7 +47,7 @@ fun TrackItem(pair: Pair<UUID, GenreItemUiState>) {
 
         ) {
 
-            Box(Modifier.weight(3f)) {
+            Box(Modifier.weight(2.5f)) {
                 Padding(horizontal = dimensionResource(id = R.dimen.small_padding)) {
                     Position(position = Alignment.CenterStart) {
                         Text(text = trackName, color = MaterialTheme.colors.onPrimary, fontSize = 12.sp)
@@ -51,11 +57,12 @@ fun TrackItem(pair: Pair<UUID, GenreItemUiState>) {
 
             Box(
                 Modifier
-                    .weight(1f)
+                    .weight(1.5f)
                     .background(color = genreBackgroundColor)
             ){
                     Position(position = Alignment.Center) {
-                        Text(text = genreName, color = MaterialTheme.colors.onSurface)
+                        Text(text = genreName, color = MaterialTheme.colors.onSurface,
+                            style = genreFont)
                     }
             }
         }

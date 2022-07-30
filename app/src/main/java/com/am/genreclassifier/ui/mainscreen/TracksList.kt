@@ -18,11 +18,11 @@ import java.util.*
 fun TracksList(genreResultDatedMap: Map<DisplayableDate, Map<UUID, GenreItemUiState>>) {
 
 
-    LazyColumn(state = rememberLazyListState(),) {
+    LazyColumn(state = rememberLazyListState(), reverseLayout = true) {
 
         genreResultDatedMap.forEach { (date, state) ->
 
-            item {
+            stickyHeader {
 //                Padding(vertical = dimensionResource(id = R.dimen.small_padding)) {
                     DateHeaderItem(date = date)
 //                }

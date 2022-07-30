@@ -12,5 +12,6 @@ open class GenreRealmObject(
     @PrimaryKey var id: UUID? = null,
     var trackName: String = "",
     var genre: String = "",
-    var date: DisplayableDate = ""
+    var date: DisplayableDate = "",
+    var timeStamp: Long? = null
 ) : RealmObject()

@@ -90,7 +90,7 @@ class MainViewModel(
     private suspend fun onItemIdle(fileName: String, randomUUID: UUID) {
 
         val genreItemUiStateIdle = GenreItemUiState(
-            randomUUID, "Idle", fileName,
+            randomUUID, GenreType.IDLE.displayableName, fileName,
             displayableDate = getCurrentDisplayableDate(),
             ViewState.Idle,
             GenreType.IDLE.mapToColor()
@@ -149,7 +149,8 @@ class MainViewModel(
 
             val genreItemUiStateLoading = genreItemUiState.copy(
                 state = ViewState.Loading,
-                genreColor = GenreType.LOADING.mapToColor()
+                genreColor = GenreType.LOADING.mapToColor(),
+                genre = GenreType.LOADING.displayableName
             )
 
             val mappedResult = mapper.map(
@@ -162,7 +163,7 @@ class MainViewModel(
 
 
     private suspend fun scan(intent: MainViewIntent) {
-        val item = getItem(intent, "Loading")
+        val item = getItem(intent)
 
         onItemLoading(item)
 
@@ -172,11 +173,11 @@ class MainViewModel(
         }
     }
 
-    private fun getItem(intent: MainViewIntent, status: String): GenreItemUiState {
+    private fun getItem(intent: MainViewIntent): GenreItemUiState {
         return when (intent) {
             is MainViewIntent.ScanTrackFile -> GenreItemUiState(
                 intent.processId,
-                status,
+                "",
                 intent.trackName,
                 getCurrentDisplayableDate(),
                 ViewState.Idle,
@@ -184,14 +185,14 @@ class MainViewModel(
             )
             is MainViewIntent.ScanTrackRawRes -> GenreItemUiState(
                 intent.processId,
-                status,
+                "",
                 intent.trackName,
                 getCurrentDisplayableDate(),
                 ViewState.Idle,
                 GenreType.IDLE.mapToColor()
             )
             else -> GenreItemUiState(
-                UUID.randomUUID(), status, "", getCurrentDisplayableDate(), ViewState.Idle,
+                UUID.randomUUID(), "", "", getCurrentDisplayableDate(), ViewState.Idle,
                 GenreType.IDLE.mapToColor()
             )
         }
