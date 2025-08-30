@@ -9,9 +9,7 @@ import org.tensorflow.lite.support.common.FileUtil
 
 class GenreClassifier(ctx: Context) {
     companion object {
-        private const val ACCURACY_THRESHOLD = 0.5f
         private const val MODEL_PATH = "genre_classifier1000.tflite"
-        private const val LABELS_PATH = "genre_classifier_model.txt"
         val predictionLabels = arrayOf(
             "disco",
             "classical",

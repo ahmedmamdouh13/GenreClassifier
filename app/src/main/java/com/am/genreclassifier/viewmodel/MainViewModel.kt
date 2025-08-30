@@ -141,6 +141,12 @@ class MainViewModel(
     }
 
     private fun getGenre(result: Result<Genre>): GenreItemUiState {
+        when(result){
+            is Result.Error -> {
+                result.e.printStackTrace()
+            }
+            is Result.Success ->  result.data.mapToUiGenre(ViewState.Success)
+        }
         return (result as Result.Success<Genre>).data.mapToUiGenre(ViewState.Success)
     }
 
